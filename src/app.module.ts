@@ -1,13 +1,31 @@
-import { Module } from '@nestjs/common';
+import { Module ,Logger} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { DoctorsModule } from './doctors/doctors.module';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
 
 @Module({
-  imports: [UsersModule, DatabaseModule, DoctorsModule],
+  imports: [UsersModule, DatabaseModule, DoctorsModule,
+  ThrottlerModule.forRoot([{
+    name: 'short',
+    ttl: 1000,
+    limit: 3,
+  },
+  {
+    name: 'long',
+    ttl: 60000,
+    limit: 100,
+  }])],
+
   controllers: [AppController],
-  providers: [AppService],
+
+  providers: [AppService,{
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard,
+  }, Logger],
 })
 export class AppModule {}

@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
+import { Throttle, SkipThrottle } from '@nestjs/throttler';
 
+@SkipThrottle() //skips for this route
 @Controller('doctors')
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
@@ -10,13 +12,14 @@ export class DoctorsController {
   create(@Body() createDoctorDto: Prisma.EmployeeCreateInput) {
     return this.doctorsService.create(createDoctorDto);
   }
-
+@SkipThrottle({default: false}) //only for this it wont skip
   @Get()
-  findAll(@Query('role') role?:'Doctor' | 'Patient' | 'Admin') {
+  findAll(@Query('role') role?:Role) {
     return this.doctorsService.findAll(role);
   } 
 
-  @Get(':id')
+@Throttle({short: {ttl:1000, limit: 1}})
+@Get(':id')
   findOne(@Param('id') id: string) {
     return this.doctorsService.findOne(+id);
   }
