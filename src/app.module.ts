@@ -1,15 +1,16 @@
 import { Module ,Logger} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
-  imports: [UsersModule, DatabaseModule, DoctorsModule,
+  imports: [DatabaseModule, DoctorsModule,
   ThrottlerModule.forRoot([{
     name: 'short',
     ttl: 1000,
@@ -19,9 +20,10 @@ import { APP_GUARD } from '@nestjs/core';
     name: 'long',
     ttl: 60000,
     limit: 100,
-  }])],
+  }]),
+  AuthModule],
 
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
 
   providers: [AppService,{
     provide: APP_GUARD,

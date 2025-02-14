@@ -14,6 +14,7 @@ export class DoctorsController {
   }
 @SkipThrottle({default: false}) //only for this it wont skip
   @Get()
+  
   findAll(@Query('role') role?:Role) {
     return this.doctorsService.findAll(role);
   } 
@@ -32,5 +33,10 @@ export class DoctorsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.doctorsService.remove(+id);
+  }
+  @Get('/combined')
+  findByRoles(@Query('roles') roles: string) {
+    const roleList = roles.split(',') as Role[]; // Convert comma-separated string to an array of roles
+    return this.doctorsService.findByRoles(roleList);
   }
 }
