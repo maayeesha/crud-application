@@ -7,10 +7,13 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { AppointmentsService } from './appointments/appointments.service';
+import { AppointmentsController } from './appointments/appointments.controller';
+import { AppointmentsModule } from './appointments/appointments.module';
 
 
 @Module({
-  imports: [DatabaseModule, DoctorsModule,
+  imports: [DatabaseModule, DoctorsModule,AppointmentsModule,
   ThrottlerModule.forRoot([{
     name: 'short',
     ttl: 1000,
@@ -21,13 +24,14 @@ import { AuthModule } from './auth/auth.module';
     ttl: 60000,
     limit: 100,
   }]),
-  AuthModule],
+  AuthModule,
+  AppointmentsModule],
 
-  controllers: [AppController, AuthController],
+  controllers: [AppController, AuthController, AppointmentsController],
 
   providers: [AppService,{
     provide: APP_GUARD,
     useClass: ThrottlerGuard,
-  }, Logger],
+  }, Logger, AppointmentsService],
 })
 export class AppModule {}

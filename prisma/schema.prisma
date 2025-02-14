@@ -21,10 +21,34 @@ model Employee {
   role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relationships
+  doctorAppointments  Appointment[] @relation("DoctorAppointments")
+  patientAppointments Appointment[] @relation("PatientAppointments")
+}
+
+model Appointment {
+  id        Int               @id @default(autoincrement())
+  patient   Employee          @relation("PatientAppointments", fields: [patientId], references: [id])
+  patientId Int
+  doctor    Employee          @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  doctorId  Int
+  date      DateTime
+  status    AppointmentStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
   Doctor
   Patient
   Admin
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+  COMPLETED
 }
