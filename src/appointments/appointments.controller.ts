@@ -1,13 +1,19 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, UseGuards, Request } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentStatus } from '@prisma/client';
+import { Roles } from 'src/roles/roles.decorator';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
   @Post()
-  async create(@Body() data: { patientId: number; doctorId: number; date: string }) {
+  @Roles('Admin') // only admins can create appointment
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  async create(@Body() data: {patientId: number; doctorId: number; date: string },@Request() req: any) {
+    console.log('User from request:', req.user); //debugging
     return this.appointmentsService.createAppointment(data.patientId, data.doctorId, new Date(data.date));
   }
 
@@ -22,16 +28,14 @@ export class AppointmentsController {
   }
 
   @Patch(':id')
-  async updateStatus(@Param('id') id: number, @Body() data: { status: string }) {
+  async updateStatus(@Param('id') id: number, @Body() data: { status: AppointmentStatus }) {
     return this.appointmentsService.updateAppointment(Number(id), data.status);
   }
 
   @Delete(':id')
+  @Roles('Admin')
   async delete(@Param('id') id: number) {
     return this.appointmentsService.deleteAppointment(Number(id));
   }
-  @Post('/update/:id')
-async updateAppointment(@Param('id') id: number, @Body() data: { status: AppointmentStatus }) {
-  return this.appointmentsService.updateAppointment(Number(id), data.status);
-}
+  
 }

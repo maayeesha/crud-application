@@ -18,7 +18,7 @@ model Employee {
   name      String
   email     String   @unique
   password  String   @default("password")
-  role      Role
+  role      Role     @default(Patient)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

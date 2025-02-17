@@ -3,10 +3,9 @@ import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-
     constructor (private authService: AuthService){}
     @Post('login')
-    login(@Body() input: {email:string; password;string}){
+    login(@Body() input: {email:string; password:string}){
         return this.authService.authenticate(input)
     }
 }

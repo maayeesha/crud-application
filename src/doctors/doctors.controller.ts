@@ -4,7 +4,8 @@ import { Prisma, Role } from '@prisma/client';
 import { Throttle, SkipThrottle } from '@nestjs/throttler';
 
 @SkipThrottle() //skips for this route
-@Controller('doctors')
+//@Controller('doctors')
+@Controller('employees')
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 

@@ -1,19 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { AppointmentStatus } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
+import { format } from 'date-fns-tz';
 
 @Injectable()
-export class AppointmentsService {
+export class AppointmentsService{
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createAppointment(patientId: number, doctorId: number, date: Date) {
-    return this.databaseService.appointment.create({
+  async createAppointment(patientId:number, doctorId:number, date: Date) {  
+    if (!patientId || !doctorId) {
+      throw new BadRequestException('Invalid IDs provided');
+    }
+
+    // const admin = await this.databaseService.employee.findUnique({ where: { id: adminId}});
+    // if (!admin || admin.role !== 'Admin') {
+    //   throw new ForbiddenException('Only admins can create appointments');
+    // }
+    
+    const patient = await this.databaseService.employee.findUnique({ where: { id: patientId } });
+    if (!patient || patient.role !== 'Patient') {
+      throw new BadRequestException('User must be a patient to create an appointment');
+    }
+
+    const doctor = await this.databaseService.employee.findUnique({ where: { id: doctorId } });
+    if (!doctor || doctor.role !== 'Doctor') {
+      throw new BadRequestException('Doctor not found');
+    }
+    const appointment = await this.databaseService.appointment.create({
       data: {
         patientId,
         doctorId,
-        date,
+        date: date,
+        status: AppointmentStatus.PENDING
       },
     });
+    return appointment;
   }
 
   async getAppointmentsByDoctor(doctorId: number) {

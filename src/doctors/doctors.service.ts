@@ -80,11 +80,6 @@ export class DoctorsService {
       throw error;
     }
   }
-
-  
-  
-  
-
   async remove(id: number) {
     return this.databaseService.employee.delete({
       where: {
