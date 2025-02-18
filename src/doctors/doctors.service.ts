@@ -1,7 +1,7 @@
 import { Injectable,NotFoundException } from '@nestjs/common';
 import { Prisma,Role } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
-import { instance as logger } from 'logger/winston.logger'; 
+import { DatabaseService } from '/Users/admin/Projects/hospital-prisma/src/database/database.service';
+import { instance as logger } from '/Users/admin/Projects/hospital-prisma/logger/winston.logger'; 
 import * as bcrypt from 'bcrypt'; // Import bcrypt
 
 

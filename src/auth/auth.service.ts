@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { DoctorsService } from 'src/doctors/doctors.service';
+import { DoctorsService } from '/Users/admin/Projects/hospital-prisma/src/doctors/doctors.service';
 import * as bcrypt from 'bcrypt'; 
 type AuthInput = { email: string; password: string};
 type SignInData = { userId: number; email: string, role: string};

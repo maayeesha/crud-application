@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Get, Param, Patch, Delete, UseGuards, Request } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentStatus } from '@prisma/client';
-import { Roles } from 'src/roles/roles.decorator';
-import { RolesGuard } from 'src/roles/roles.guard';
+import { Roles } from '/Users/admin/Projects/hospital-prisma/src/roles/roles.decorator';
+import { RolesGuard } from '/Users/admin/Projects/hospital-prisma/src/roles/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('appointments')

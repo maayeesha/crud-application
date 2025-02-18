@@ -1,7 +1,6 @@
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AppointmentStatus } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
-import { format } from 'date-fns-tz';
+import { DatabaseService } from '/Users/admin/Projects/hospital-prisma/src/database/database.service';
 
 @Injectable()
 export class AppointmentsService{
