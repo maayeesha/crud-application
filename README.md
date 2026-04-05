@@ -34,7 +34,7 @@ A comprehensive hospital management system designed to automate various administ
 - **GET /api/appointments**: List all appointments.
 
 ## Installation Instructions
-1. Clone the repository: `git clone <repo-url>`
+1. Clone the repository: `git clone https://github.com/maayeesha/crud-application`
 2. Navigate to the project directory: `cd crud-application`
 3. Install dependencies for both frontend and backend:
    - For the backend: `npm install`
